@@ -1,154 +1,78 @@
-generator client {
-  provider = "prisma-client-js"
+
+model SoccerMatch {
+  id              Int      @id @default(autoincrement())
+  matchCode       String   @unique
+  gender          String   // "men" or "women"
+  round           Int
+  matchNumber     Int
+  team1           String
+  team2           String
+  team1FirstHalf  Int      @default(0)
+  team1SecondHalf Int      @default(0)
+  team2FirstHalf  Int      @default(0)
+  team2SecondHalf Int      @default(0)
+  team1Total      Int      @default(0)
+  team2Total      Int      @default(0)
+  team1PkScore    Int?     // PK戦スコア
+  team2PkScore    Int?     // PK戦スコア
+  status          String   @default("waiting") // waiting, in_progress, finished
+  winner          String?
+  scheduledTime   String   @default("")
+  startTime       String   @default("")
+  endTime         String   @default("")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("soccer_matches")
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
-model SoftballMatch {
-  id             Int      @id @default(autoincrement())
-  matchCode      String   @unique
-  round          Int
-  matchNumber    Int
-  team1          String
-  team2          String
-  team1Scores    String
-  team2Scores    String
-  team1Total     Int      @default(0)
-  team2Total     Int      @default(0)
-  status         String   @default("waiting")
-  winner         String?
-  scheduledTime  String   @default("")
-  startTime      String   @default("")
-  endTime        String   @default("")
-  isJankenNeeded Boolean  @default(false)
-  jankenWinner   String?
-  isHomeFirst    Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  @@map("softball_matches")
-}
-
-model SoftballRanking {
-  id           Int      @id @default(autoincrement())
-  className    String   @unique
-  rank         Int?
-  rankText     String?
-  eliminatedAt String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  @@map("softball_rankings")
-}
-
-model BasketballMatch {
-  id                Int      @id @default(autoincrement())
-  matchCode         String   @unique
-  gender            String
-  round             Int
-  matchNumber       Int
-  team1             String
-  team2             String
-  team1FirstHalf    Int      @default(0)
-  team1SecondHalf   Int      @default(0)
-  team1FreeThrow    Int      @default(0)
-  team2FirstHalf    Int      @default(0)
-  team2SecondHalf   Int      @default(0)
-  team2FreeThrow    Int      @default(0)
-  team1Total        Int      @default(0)
-  team2Total        Int      @default(0)
-  status            String   @default("waiting")
-  winner            String?
-  scheduledTime     String   @default("")
-  startTime         String   @default("")
-  endTime           String   @default("")
-  isFreeThrowNeeded Boolean  @default(false)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  @@map("basketball_matches")
-}
-
-model BasketballRanking {
-  id           Int      @id @default(autoincrement())
-  className    String
-  gender       String
-  rank         Int?
-  rankText     String?
-  eliminatedAt String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+model SoccerRanking {
+  id        Int      @id @default(autoincrement())
+  className String   
+  gender    String   // "men" or "women"
+  rank      Int?     // 1位, 2位, 3位, 4位など
+  rankText  String?  // "1位", "2位", "3位", "4位", "ベスト8", "ベスト16", "ベスト19"
+  eliminatedAt String? // 敗退時の試合コード
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([className, gender])
-  @@map("basketball_rankings")
+  @@map("soccer_rankings")
 }
 
-model TableTennisMatch {
-  id                    Int      @id @default(autoincrement())
-  matchCode             String   @unique
-  round                 Int
-  matchNumber           Int
-  team1                 String
-  team2                 String
-  menSinglesTeam1Set1   Int      @default(0)
-  menSinglesTeam1Set2   Int      @default(0)
-  menSinglesTeam1Set3   Int      @default(0)
-  menSinglesTeam2Set1   Int      @default(0)
-  menSinglesTeam2Set2   Int      @default(0)
-  menSinglesTeam2Set3   Int      @default(0)
-  menSinglesWinner      String?
-  womenSinglesTeam1Set1 Int      @default(0)
-  womenSinglesTeam1Set2 Int      @default(0)
-  womenSinglesTeam1Set3 Int      @default(0)
-  womenSinglesTeam2Set1 Int      @default(0)
-  womenSinglesTeam2Set2 Int      @default(0)
-  womenSinglesTeam2Set3 Int      @default(0)
-  womenSinglesWinner    String?
-  menDoublesTeam1Set1   Int      @default(0)
-  menDoublesTeam1Set2   Int      @default(0)
-  menDoublesTeam1Set3   Int      @default(0)
-  menDoublesTeam2Set1   Int      @default(0)
-  menDoublesTeam2Set2   Int      @default(0)
-  menDoublesTeam2Set3   Int      @default(0)
-  menDoublesWinner      String?
-  womenDoublesTeam1Set1 Int      @default(0)
-  womenDoublesTeam1Set2 Int      @default(0)
-  womenDoublesTeam1Set3 Int      @default(0)
-  womenDoublesTeam2Set1 Int      @default(0)
-  womenDoublesTeam2Set2 Int      @default(0)
-  womenDoublesTeam2Set3 Int      @default(0)
-  womenDoublesWinner    String?
-  mixedDoublesTeam1Set1 Int      @default(0)
-  mixedDoublesTeam1Set2 Int      @default(0)
-  mixedDoublesTeam1Set3 Int      @default(0)
-  mixedDoublesTeam2Set1 Int      @default(0)
-  mixedDoublesTeam2Set2 Int      @default(0)
-  mixedDoublesTeam2Set3 Int      @default(0)
-  mixedDoublesWinner    String?
-  team1Wins             Int      @default(0)
-  team2Wins             Int      @default(0)
-  status                String   @default("waiting")
-  winner                String?
-  scheduledTime         String   @default("")
-  startTime             String   @default("")
-  endTime               String   @default("")
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
+model VolleyballMatch {
+  id            Int      @id @default(autoincrement())
+  matchCode     String   @unique
+  gender        String   // "men" or "women"
+  league        String   // "A", "B", "C", "E" (決勝リーグ)
+  matchNumber   Int
+  team1         String
+  team2         String
+  team1Score    Int      @default(0)
+  team2Score    Int      @default(0)
+  status        String   @default("waiting") // waiting, in_progress, finished
+  winner        String?
+  scheduledTime String   @default("")
+  startTime     String   @default("")
+  endTime       String   @default("")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  @@map("tabletennis_matches")
+  @@map("volleyball_matches")
 }
 
-model TableTennisRanking {
+model VolleyballRanking {
   id           Int      @id @default(autoincrement())
-  className    String   @unique
-  rank         Int?
-  rankText     String?
-  eliminatedAt String?
+  className    String   
+  gender       String   // "men" or "women"
+  league       String   // "A", "B", "C", "E"
+  matches      Int      @default(0) // 試合数
+  wins         Int      @default(0) // 勝利数
+  pointDiff    Int      @default(0) // 得失点差
+  rank         Int?     // リーグ内順位
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  @@map("tabletennis_rankings")
-}
+  @@unique([className, gender, league])
+  @@map("volleyball_rankings")
+} 

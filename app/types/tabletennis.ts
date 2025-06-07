@@ -102,12 +102,29 @@ export interface TableTennisMatch {
   scheduledTime: string
   startTime: string
   endTime: string
+  createdAt: string
+  updatedAt: string
   isEditing?: boolean
   editHistory?: EditHistory[]
 }
 
+export interface TableTennisStatistics {
+  totalMatches: number
+  completedMatches: number
+  inProgressMatches: number
+  waitingMatches: number
+  totalGames: number
+  averageGamesPerMatch: number
+  closestMatch: {
+    matchCode: string
+    score: string
+    teams: string
+  } | null
+  lastUpdated: number | null
+}
+
 export interface TableTennisRanking {
-  id: number
+  id: string
   className: string
   rank: number | null
   rankText: string | null
