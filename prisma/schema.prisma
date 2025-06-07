@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model SoftballMatch {
@@ -160,4 +160,82 @@ model TableTennisRanking {
   updatedAt DateTime @updatedAt
 
   @@map("tabletennis_rankings")
+}
+
+model SoccerMatch {
+  id              Int      @id @default(autoincrement())
+  matchCode       String   @unique
+  gender          String   // "men" or "women"
+  round           Int
+  matchNumber     Int
+  team1           String
+  team2           String
+  team1FirstHalf  Int      @default(0)
+  team1SecondHalf Int      @default(0)
+  team2FirstHalf  Int      @default(0)
+  team2SecondHalf Int      @default(0)
+  team1Total      Int      @default(0)
+  team2Total      Int      @default(0)
+  team1PkScore    Int?     // PK戦スコア
+  team2PkScore    Int?     // PK戦スコア
+  status          String   @default("waiting") // waiting, in_progress, finished
+  winner          String?
+  scheduledTime   String   @default("")
+  startTime       String   @default("")
+  endTime         String   @default("")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("soccer_matches")
+}
+
+model SoccerRanking {
+  id        Int      @id @default(autoincrement())
+  className String   
+  gender    String   // "men" or "women"
+  rank      Int?     // 1位, 2位, 3位, 4位など
+  rankText  String?  // "1位", "2位", "3位", "4位", "ベスト8", "ベスト16", "ベスト19"
+  eliminatedAt String? // 敗退時の試合コード
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([className, gender])
+  @@map("soccer_rankings")
+}
+
+model VolleyballMatch {
+  id            Int      @id @default(autoincrement())
+  matchCode     String   @unique
+  gender        String   // "men" or "women"
+  league        String   // "A", "B", "C", "E" (決勝リーグ)
+  matchNumber   Int
+  team1         String
+  team2         String
+  team1Score    Int      @default(0)
+  team2Score    Int      @default(0)
+  status        String   @default("waiting") // waiting, in_progress, finished
+  winner        String?
+  scheduledTime String   @default("")
+  startTime     String   @default("")
+  endTime       String   @default("")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@map("volleyball_matches")
+}
+
+model VolleyballRanking {
+  id           Int      @id @default(autoincrement())
+  className    String   
+  gender       String   // "men" or "women"
+  league       String   // "A", "B", "C", "E"
+  matches      Int      @default(0) // 試合数
+  wins         Int      @default(0) // 勝利数
+  pointDiff    Int      @default(0) // 得失点差
+  rank         Int?     // リーグ内順位
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([className, gender, league])
+  @@map("volleyball_rankings")
 } 
