@@ -115,7 +115,9 @@ export async function PUT(
       winner: match.winner,
       scheduledTime: match.scheduledTime,
       startTime: match.startTime,
-      endTime: match.endTime
+      endTime: match.endTime,
+      createdAt: match.createdAt.toISOString(),
+      updatedAt: match.updatedAt.toISOString()
     }
 
     return NextResponse.json(formattedMatch)

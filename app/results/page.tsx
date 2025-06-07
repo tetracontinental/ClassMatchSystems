@@ -33,7 +33,7 @@ const sports = [
   },
   { 
     name: '卓球', 
-    href: '/results/table-tennis',
+    href: '/results/tabletennis',
     icon: '🏓',
     description: '卓球の試合結果',
     gradient: 'from-yellow-500 to-orange-600'

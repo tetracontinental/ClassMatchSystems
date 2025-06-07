@@ -35,20 +35,20 @@ export default function EditPage() {
     {
       id: 'soccer',
       name: 'サッカー',
-      description: '準備中',
+      description: '男女別シングルエリミネーション形式',
       icon: '⚽',
       href: '/edit/soccer',
-      available: false,
-      gradient: 'from-gray-400 to-gray-600'
+      available: true,
+      gradient: 'from-purple-500 to-purple-700'
     },
     {
       id: 'volleyball',
       name: 'バレーボール',
-      description: '準備中',
+      description: '予選リーグ戦・決勝リーグ戦の管理',
       icon: '🏐',
       href: '/edit/volleyball',
-      available: false,
-      gradient: 'from-gray-400 to-gray-600'
+      available: true,
+      gradient: 'from-red-500 to-red-700'
     }
   ]
 
@@ -149,10 +149,10 @@ export default function EditPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                <span className="text-2xl font-bold text-white">3</span>
+                <span className="text-2xl font-bold text-white">5</span>
               </div>
               <h3 className="text-xl font-semibold text-white mb-2">利用可能競技</h3>
-              <p className="text-gray-400">ソフトボール・バスケ・卓球</p>
+              <p className="text-gray-400">ソフトボール・バスケ・卓球・サッカー・バレーボール</p>
             </div>
             
             <div className="text-center">

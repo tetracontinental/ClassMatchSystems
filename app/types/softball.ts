@@ -53,4 +53,30 @@ export interface JankenResult {
   team1Choice: 'rock' | 'paper' | 'scissors'
   team2Choice: 'rock' | 'paper' | 'scissors'
   winner: 'team1' | 'team2' | 'draw'
+}
+
+export interface SoftballStatistics {
+  totalMatches: number
+  completedMatches: number
+  inProgressMatches: number
+  waitingMatches: number
+  highestScore: {
+    score: number
+    team: string
+    matchCode: string
+  }
+  averageScore: number
+  extensionMatches: number
+  jankenMatches: number
+  lastUpdated: string | null
+}
+
+export interface SoftballRanking {
+  id: string
+  className: string
+  rank: number | null
+  rankText: string
+  eliminatedAt: string | null
+  createdAt: string
+  updatedAt: string
 } 

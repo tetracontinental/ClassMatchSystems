@@ -2,9 +2,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 
 // 順位一覧取得
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const rankings = await prisma.softballRanking.findMany({
+    const searchParams = request.nextUrl.searchParams
+    const gender = searchParams.get('gender')
+
+    if (!gender) {
+      return NextResponse.json(
+        { error: 'Gender parameter is required' },
+        { status: 400 }
+      )
+    }
+
+    const rankings = await prisma.soccerRanking.findMany({
+      where: { gender },
       orderBy: [
         { rank: 'asc' },
         { className: 'asc' }
@@ -22,10 +33,15 @@ export async function GET() {
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-    const { className, rank, rankText, eliminatedAt } = body
+    const { className, gender, rank, rankText, eliminatedAt } = body
 
-    const ranking = await prisma.softballRanking.upsert({
-      where: { className },
+    const ranking = await prisma.soccerRanking.upsert({
+      where: { 
+        className_gender: { 
+          className, 
+          gender 
+        } 
+      },
       update: {
         rank,
         rankText,
@@ -33,6 +49,7 @@ export async function PUT(request: NextRequest) {
       },
       create: {
         className,
+        gender,
         rank,
         rankText,
         eliminatedAt
@@ -47,10 +64,22 @@ export async function PUT(request: NextRequest) {
 }
 
 // 順位初期化
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
+    const body = await request.json()
+    const { gender } = body
+
+    if (!gender) {
+      return NextResponse.json(
+        { error: 'Gender parameter is required' },
+        { status: 400 }
+      )
+    }
+
     // 既存の順位データを削除
-    await prisma.softballRanking.deleteMany()
+    await prisma.soccerRanking.deleteMany({
+      where: { gender }
+    })
 
     // 全クラスを初期状態で作成
     const classes = [
@@ -60,9 +89,10 @@ export async function POST() {
       '教職員'
     ]
 
-    await prisma.softballRanking.createMany({
+    await prisma.soccerRanking.createMany({
       data: classes.map(className => ({
         className,
+        gender,
         rank: null,
         rankText: '参加中',
         eliminatedAt: null
@@ -74,4 +104,4 @@ export async function POST() {
     console.error('順位初期化エラー:', error)
     return NextResponse.json({ error: '順位の初期化に失敗しました' }, { status: 500 })
   }
-} 
+}
